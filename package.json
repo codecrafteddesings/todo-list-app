@@ -1,17 +1,38 @@
 {
   "homepage": "http://codecrafteddesings.github.io/todo-list-app",
-  "name": "todo-list-app",
-  "version": "0.1.0",
+  "name": "todolist-pro",
+  "version": "1.0.0",
+  "description": "Una aplicación moderna y profesional para gestionar tareas de manera eficiente",
+  "keywords": [
+    "todo",
+    "tareas",
+    "productividad",
+    "react",
+    "pwa",
+    "material-ui"
+  ],
+  "author": "CodeCrafted Designs",
+  "license": "MIT",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/roboto": "^5.2.6",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/material": "^7.2.0",
+    "@mui/x-date-pickers": "^8.8.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "dayjs": "^1.11.13",
     "gh-pages": "^6.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "uuid": "^11.1.0",
+    "web-vitals": "^2.1.4",
+    "workbox-webpack-plugin": "^7.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -19,7 +40,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "analyze": "npx source-map-explorer 'build/static/js/*.js'",
+    "lighthouse": "npx lighthouse http://localhost:3000 --view"
   },
   "eslintConfig": {
     "extends": [

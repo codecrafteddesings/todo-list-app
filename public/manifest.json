@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "TodoList Pro",
+  "name": "TodoList Pro - Gestor de Tareas Profesional",
+  "description": "Una aplicación moderna y profesional para gestionar tus tareas de manera eficiente",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,11 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1976d2",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "utilities", "lifestyle"],
+  "lang": "es",
+  "scope": "/",
+  "prefer_related_applications": false
 }

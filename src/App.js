@@ -1,54 +1,115 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useEffect } from 'react';
+import {
+  ThemeProvider,
+  CssBaseline,
+  Container,
+  Box,
+  Snackbar,
+  Alert,
+} from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 
-function App() {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
+import { TodoProvider, useTodo } from './context/TodoContext';
+import { lightTheme, darkTheme } from './styles/theme';
+import Header from './components/Header';
+import TodoList from './components/TodoList';
+import AddTodoFab from './components/AddTodoFab';
 
-  const addTask = () => {
-    if (newTask.trim()) {
-      setTasks([...tasks, { text: newTask, completed: false }]);
-      setNewTask("");
+// Configurar dayjs en español
+dayjs.locale('es');
+
+// Componente principal de la aplicación
+const AppContent = () => {
+  const { theme, error } = useTodo();
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  // Mostrar errores en snackbar
+  useEffect(() => {
+    if (error) {
+      setSnackbarOpen(true);
     }
-  };
+  }, [error]);
 
-  const toggleTaskCompletion = (index) => {
-    const updatedTasks = tasks.map((task, idx) => 
-      idx === index ? { ...task, completed: !task.completed } : task
-    );
-    setTasks(updatedTasks);
-  };
+  // Registrar service worker para PWA
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  }, []);
 
-  const deleteTask = (index) => {
-    const updatedTasks = tasks.filter((_, idx) => idx !== index);
-    setTasks(updatedTasks);
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
-    <div className="App">
-      <h1>To-Do List</h1>
-      <div>
-        <input 
-          type="text" 
-          value={newTask} 
-          onChange={(e) => setNewTask(e.target.value)} 
-        />
-        <button onClick={addTask}>Add Task</button>
-      </div>
-      <ul>
-        {tasks.map((task, index) => (
-          <li key={index}>
-            <span 
-              style={{ textDecoration: task.completed ? 'line-through' : 'none' }}
-              onClick={() => toggleTaskCompletion(index)}
+    <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
+        <CssBaseline />
+        
+        <Box
+          sx={{
+            minHeight: '100vh',
+            backgroundColor: 'background.default',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {/* Header */}
+          <Header />
+          
+          {/* Contenido principal */}
+          <Container
+            maxWidth="lg"
+            sx={{
+              flex: 1,
+              py: 3,
+              px: { xs: 2, sm: 3 },
+            }}
+          >
+            <TodoList />
+          </Container>
+          
+          {/* Botón flotante para agregar */}
+          <AddTodoFab />
+          
+          {/* Snackbar para errores */}
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          >
+            <Alert
+              onClose={handleSnackbarClose}
+              severity="error"
+              variant="filled"
             >
-              {task.text}
-            </span>
-            <button onClick={() => deleteTask(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+              {error}
+            </Alert>
+          </Snackbar>
+        </Box>
+      </LocalizationProvider>
+    </ThemeProvider>
+  );
+};
+
+// Componente App con Provider
+function App() {
+  return (
+    <TodoProvider>
+      <AppContent />
+    </TodoProvider>
   );
 }
 
