@@ -2,6 +2,7 @@
   "short_name": "TodoList Pro",
   "name": "TodoList Pro - Gestor de Tareas Profesional",
   "description": "Una aplicación moderna y profesional para gestionar tus tareas de manera eficiente",
+  "id": "todolist-pro-app",
   "icons": [
     {
       "src": "favicon.ico",
@@ -17,6 +18,20 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Agregar Tarea",
+      "short_name": "Nueva Tarea",
+      "description": "Crear una nueva tarea rápidamente",
+      "url": "/?action=new-task",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "start_url": "/",
