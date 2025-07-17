@@ -51,15 +51,27 @@ const AddTodoFab = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
         fullScreen={isMobile}
         TransitionComponent={isMobile ? Transition : undefined}
+        PaperProps={{
+          sx: {
+            minHeight: isMobile ? '100vh' : '600px',
+            maxHeight: isMobile ? '100vh' : '90vh',
+          }
+        }}
       >
         <DialogTitle>
           Agregar Nueva Tarea
         </DialogTitle>
-        <DialogContent>
+        <DialogContent
+          sx={{
+            pt: 2,
+            pb: 3,
+            minHeight: isMobile ? 'auto' : '500px',
+          }}
+        >
           <TodoForm onSubmit={handleClose} />
         </DialogContent>
       </Dialog>

@@ -10,8 +10,11 @@ import {
   SearchOff as SearchOffIcon,
   Add as AddIcon,
 } from '@mui/icons-material';
+import { useTodo } from '../context/TodoContext';
 
-const EmptyState = ({ filter, searchTerm }) => {
+const EmptyState = ({ filter, searchTerm, onAddTask }) => {
+  const { setFilter, setSearchTerm } = useTodo();
+
   const getEmptyStateContent = () => {
     if (searchTerm) {
       return {
@@ -19,6 +22,7 @@ const EmptyState = ({ filter, searchTerm }) => {
         title: 'No se encontraron resultados',
         subtitle: `No hay tareas que coincidan con "${searchTerm}"`,
         actionText: 'Limpiar búsqueda',
+        action: () => setSearchTerm(''),
       };
     }
 
@@ -29,6 +33,7 @@ const EmptyState = ({ filter, searchTerm }) => {
           title: '¡Sin tareas completadas aún!',
           subtitle: 'Completa algunas tareas para verlas aquí',
           actionText: 'Ver todas las tareas',
+          action: () => setFilter('all'),
         };
       case 'active':
         return {
@@ -36,6 +41,7 @@ const EmptyState = ({ filter, searchTerm }) => {
           title: '¡Todas las tareas completadas!',
           subtitle: 'Excelente trabajo, no tienes tareas pendientes',
           actionText: 'Agregar nueva tarea',
+          action: onAddTask,
         };
       case 'today':
         return {
@@ -43,6 +49,7 @@ const EmptyState = ({ filter, searchTerm }) => {
           title: 'No hay tareas para hoy',
           subtitle: 'Disfruta de tu día libre o programa algo nuevo',
           actionText: 'Agregar tarea para hoy',
+          action: onAddTask,
         };
       case 'week':
         return {
@@ -50,6 +57,7 @@ const EmptyState = ({ filter, searchTerm }) => {
           title: 'No hay tareas para esta semana',
           subtitle: 'Planifica tu semana agregando nuevas tareas',
           actionText: 'Agregar tarea para esta semana',
+          action: onAddTask,
         };
       case 'overdue':
         return {
@@ -57,6 +65,7 @@ const EmptyState = ({ filter, searchTerm }) => {
           title: '¡No hay tareas vencidas!',
           subtitle: 'Estás al día con todas tus responsabilidades',
           actionText: 'Ver todas las tareas',
+          action: () => setFilter('all'),
         };
       default:
         return {
@@ -64,6 +73,7 @@ const EmptyState = ({ filter, searchTerm }) => {
           title: 'Comienza tu lista de tareas',
           subtitle: 'Agrega tu primera tarea y mantente organizado',
           actionText: 'Agregar primera tarea',
+          action: onAddTask,
         };
     }
   };

@@ -27,7 +27,8 @@ export const TodoProvider = ({ children }) => {
   const addTodo = (todoData) => {
     const newTodo = {
       id: uuidv4(),
-      text: todoData.text,
+      title: todoData.title || todoData.text, // Soporte para ambos nombres
+      text: todoData.text || todoData.title,
       description: todoData.description || '',
       category: todoData.category || 'personal',
       priority: todoData.priority || 'medium',
@@ -35,7 +36,10 @@ export const TodoProvider = ({ children }) => {
       completed: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      tags: todoData.tags || []
+      completedAt: null,
+      tags: todoData.tags || [],
+      workTime: 0, // Tiempo trabajado en segundos
+      pomodoroSessions: [] // Registro de sesiones pomodoro
     };
     dispatch({ type: 'ADD_TODO', payload: newTodo });
   };
@@ -89,6 +93,26 @@ export const TodoProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_COMPLETED' });
   };
 
+  const addWorkTime = (todoId, timeWorked, sessionData) => {
+    dispatch({ 
+      type: 'ADD_WORK_TIME', 
+      payload: { 
+        id: todoId, 
+        timeWorked, 
+        sessionDate: sessionData?.sessionDate || new Date().toISOString(),
+        sessionType: sessionData?.sessionType || 'pomodoro'
+      } 
+    });
+  };
+
+  const clearAllTodos = () => {
+    dispatch({ type: 'CLEAR_ALL_TODOS' });
+  };
+
+  const importTodos = (todos) => {
+    dispatch({ type: 'IMPORT_TODOS', payload: todos });
+  };
+
   const value = {
     ...state,
     addTodo,
@@ -101,7 +125,11 @@ export const TodoProvider = ({ children }) => {
     addCategory,
     deleteCategory,
     toggleTheme,
-    clearCompleted
+    clearCompleted,
+    addWorkTime,
+    clearAllTodos,
+    importTodos,
+    dispatch // Exportar dispatch para casos especiales
   };
 
   return (

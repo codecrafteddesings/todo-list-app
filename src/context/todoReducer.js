@@ -41,6 +41,7 @@ export const todoReducer = (state, action) => {
             ? { 
                 ...todo, 
                 completed: !todo.completed,
+                completedAt: !todo.completed ? new Date().toISOString() : null,
                 updatedAt: new Date().toISOString()
               }
             : todo
@@ -92,6 +93,40 @@ export const todoReducer = (state, action) => {
       return {
         ...state,
         todos: state.todos.filter(todo => !todo.completed)
+      };
+
+    case 'ADD_WORK_TIME':
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? {
+                ...todo,
+                workTime: (todo.workTime || 0) + action.payload.timeWorked,
+                pomodoroSessions: [
+                  ...(todo.pomodoroSessions || []),
+                  {
+                    date: action.payload.sessionDate,
+                    timeWorked: action.payload.timeWorked,
+                    type: action.payload.sessionType || 'pomodoro'
+                  }
+                ],
+                updatedAt: new Date().toISOString()
+              }
+            : todo
+        )
+      };
+
+    case 'CLEAR_ALL_TODOS':
+      return {
+        ...state,
+        todos: []
+      };
+
+    case 'IMPORT_TODOS':
+      return {
+        ...state,
+        todos: action.payload
       };
 
     case 'SET_LOADING':

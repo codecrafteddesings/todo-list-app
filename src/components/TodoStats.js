@@ -75,7 +75,7 @@ const TodoStats = () => {
       </Typography>
       
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} md={3}>
           <StatsCard
             title="Progreso Total"
             value={`${stats.completionRate}%`}
@@ -85,7 +85,7 @@ const TodoStats = () => {
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} md={3}>
           <StatsCard
             title="Para Hoy"
             value={todayTodos.length}
@@ -95,7 +95,7 @@ const TodoStats = () => {
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} md={3}>
           <StatsCard
             title="Completadas"
             value={stats.completed}
@@ -105,7 +105,7 @@ const TodoStats = () => {
           />
         </Grid>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} md={3}>
           <StatsCard
             title="Vencidas"
             value={overdueTodos.length}

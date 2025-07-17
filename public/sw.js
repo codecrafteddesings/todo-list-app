@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
-// Service Worker para TodoList Pro
-const CACHE_NAME = 'todolist-pro-v1';
+/* global clients */
+// Service Worker para TambleroKamba v2.0
+const CACHE_NAME = 'tamblero-kamba-v2.0';
 const urlsToCache = [
   '/',
   '/static/css/main.css',
@@ -30,9 +31,32 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+
+        return fetch(event.request).then(
+          (response) => {
+            // Verificar si recibimos una respuesta válida
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            // Clonar la respuesta para cache
+            const responseToCache = response.clone();
+
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return response;
+          }
+        );
+      })
+      .catch(() => {
+        // Si fallan tanto cache como red, mostrar página offline
+        if (event.request.destination === 'document') {
+          return caches.match('/');
+        }
+      })
   );
 });
 
@@ -50,4 +74,80 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+});
+
+// Manejo de notificaciones push
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'Nueva notificación de TambleroKamba',
+    icon: '/logo192.png',
+    badge: '/logo512.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: '2'
+    },
+    actions: [
+      {
+        action: 'explore', 
+        title: 'Ver detalles'
+      },
+      {
+        action: 'close', 
+        title: 'Cerrar'
+      },
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('TambleroKamba', options)
+  );
+});
+
+// Manejo de clicks en notificaciones
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'explore') {
+    // Abrir la aplicación
+    event.waitUntil(
+      clients.openWindow('/')
+    );
+  } else if (event.action === 'close') {
+    // Solo cerrar la notificación
+    return;
+  } else {
+    // Click en el cuerpo de la notificación
+    event.waitUntil(
+      clients.matchAll().then((clientList) => {
+        for (const client of clientList) {
+          if (client.url === '/' && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow('/');
+        }
+      })
+    );
+  }
+});
+
+// Sincronización en segundo plano
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(doBackgroundSync());
+  }
+});
+
+function doBackgroundSync() {
+  console.log('Realizando sincronización en segundo plano...');
+  return Promise.resolve();
+}
+
+// Manejo de mensajes
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });

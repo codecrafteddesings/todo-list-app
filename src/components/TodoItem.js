@@ -199,11 +199,23 @@ const TodoItem = ({ todo }) => {
       <Dialog
         open={editDialogOpen}
         onClose={() => setEditDialogOpen(false)}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            minHeight: '600px',
+            maxHeight: '90vh',
+          }
+        }}
       >
         <DialogTitle>Editar Tarea</DialogTitle>
-        <DialogContent>
+        <DialogContent
+          sx={{
+            pt: 2,
+            pb: 3,
+            minHeight: '500px',
+          }}
+        >
           <TodoForm
             initialData={todo}
             onSubmit={() => setEditDialogOpen(false)}

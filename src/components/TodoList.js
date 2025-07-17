@@ -1,21 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
   Paper,
   Fade,
   Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Card,
+  CardContent,
 } from '@mui/material';
+import {
+  Add as AddIcon,
+} from '@mui/icons-material';
 
 import { useTodo } from '../context/TodoContext';
 import { useFilteredTodos } from '../hooks/useFilteredTodos';
 import TodoItem from './TodoItem';
 import EmptyState from './EmptyState';
 import TodoStats from './TodoStats';
+import TodoForm from './TodoForm';
 
 const TodoList = () => {
   const { filter, searchTerm, todos: allTodos } = useTodo();
   const { todos, stats } = useFilteredTodos();
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+
+  const handleAddTask = () => {
+    setAddDialogOpen(true);
+  };
+
+  const handleCloseAddDialog = () => {
+    setAddDialogOpen(false);
+  };
 
   return (
     <Box>
@@ -26,7 +44,11 @@ const TodoList = () => {
 
       {/* Todo List */}
       {todos.length === 0 ? (
-        <EmptyState filter={filter} searchTerm={searchTerm} />
+        <EmptyState 
+          filter={filter} 
+          searchTerm={searchTerm} 
+          onAddTask={handleAddTask}
+        />
       ) : (
         <>
           {/* Stats Summary - when filtering/searching */}
@@ -90,9 +112,112 @@ const TodoList = () => {
                 </div>
               </Fade>
             ))}
+            
+            {/* Botón para agregar nueva tarea */}
+            <Fade in={true} timeout={300} style={{ transitionDelay: `${todos.length * 50 + 100}ms` }}>
+              <Card
+                sx={{
+                  mt: 3,
+                  cursor: 'pointer',
+                  border: '2px dashed',
+                  borderColor: 'primary.main',
+                  backgroundColor: 'background.paper',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                    borderColor: 'primary.dark',
+                    transform: 'translateY(-2px)',
+                    boxShadow: 4
+                  }
+                }}
+                onClick={handleAddTask}
+              >
+                <CardContent
+                  sx={{
+                    textAlign: 'center',
+                    py: 4,
+                    px: 3,
+                    '&:last-child': { pb: 4 }
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: '50%',
+                        backgroundColor: 'primary.main',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'transform 0.2s ease',
+                        '&:hover': {
+                          transform: 'scale(1.1)'
+                        }
+                      }}
+                    >
+                      <AddIcon sx={{ color: 'white', fontSize: 32 }} />
+                    </Box>
+                    
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          color: 'primary.main',
+                          fontWeight: 'bold',
+                          mb: 0.5
+                        }}
+                      >
+                        Agregar nueva tarea
+                      </Typography>
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary"
+                      >
+                        Organiza tu día creando una nueva tarea
+                      </Typography>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Fade>
           </Stack>
         </>
       )}
+
+      {/* Add Task Dialog */}
+      <Dialog
+        open={addDialogOpen}
+        onClose={handleCloseAddDialog}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            minHeight: '600px',
+            maxHeight: '90vh',
+          }
+        }}
+      >
+        <DialogTitle>
+          Agregar Nueva Tarea
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            pt: 2,
+            pb: 3,
+            minHeight: '500px',
+          }}
+        >
+          <TodoForm onSubmit={handleCloseAddDialog} />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
