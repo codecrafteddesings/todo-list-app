@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -68,51 +68,127 @@ const TodoStats = () => {
     return acc;
   }, {});
 
+  // Carrusel horizontal simple (scroll manual) con dots
+  const cards = [
+    {
+      title: "Progreso Total",
+      value: `${stats.completionRate}%`,
+      subtitle: `${stats.completed} de ${stats.total} completadas`,
+      icon: <TrendingUpIcon sx={{ fontSize: 40 }} />,
+      color: "primary"
+    },
+    {
+      title: "Para Hoy",
+      value: todayTodos.length,
+      subtitle: "tareas programadas",
+      icon: <ScheduleIcon sx={{ fontSize: 40 }} />,
+      color: "info"
+    },
+    {
+      title: "Completadas",
+      value: stats.completed,
+      subtitle: "tareas finalizadas",
+      icon: <CheckCircleIcon sx={{ fontSize: 40 }} />,
+      color: "success"
+    },
+    {
+      title: "Vencidas",
+      value: overdueTodos.length,
+      subtitle: "requieren atención",
+      icon: <WarningIcon sx={{ fontSize: 40 }} />,
+      color: "error"
+    }
+  ];
+  // Estado para dot activo
+  const [activeIndex, setActiveIndex] = useState(0);
+  // Detectar scroll y actualizar dot
+  const carouselRef = React.useRef();
+  React.useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const cardWidth = 260 + 16; // minWidth + margin
+      const idx = Math.round(el.scrollLeft / cardWidth);
+      setActiveIndex(idx);
+    };
+    el.addEventListener('scroll', onScroll);
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <Box sx={{ mb: 4 }}>
-      <Typography variant="h5" gutterBottom fontWeight="600">
+      <Typography variant="h5" gutterBottom fontWeight="600" textAlign="center">
         Resumen de Productividad
       </Typography>
-      
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={3}>
-          <StatsCard
-            title="Progreso Total"
-            value={`${stats.completionRate}%`}
-            subtitle={`${stats.completed} de ${stats.total} completadas`}
-            icon={<TrendingUpIcon sx={{ fontSize: 40 }} />}
-            color="primary"
-          />
+
+      {/* Carrusel horizontal simple con dots en móvil/tablet */}
+      <Box
+        sx={{
+          mb: 3,
+          display: { xs: 'block', md: 'none' },
+        }}
+      >
+        <Box
+          ref={carouselRef}
+          sx={{
+            overflowX: 'auto',
+            whiteSpace: 'nowrap',
+            pb: 1,
+            scrollSnapType: 'x mandatory',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {cards.map((card, idx) => (
+            <Box
+              key={idx}
+              sx={{
+                display: 'inline-block',
+                minWidth: 260,
+                mr: 2,
+                scrollSnapAlign: 'center',
+                verticalAlign: 'top',
+              }}
+            >
+              <StatsCard {...card} />
+            </Box>
+          ))}
+        </Box>
+        {/* Dots indicadores */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
+          {cards.map((_, idx) => (
+            <Box
+              key={idx}
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                mx: 0.5,
+                backgroundColor: idx === activeIndex ? 'primary.main' : 'grey.400',
+                transition: 'background 0.3s',
+              }}
+            />
+          ))}
+        </Box>
+      </Box>
+
+      {/* Grid centrado y distribuido en desktop */}
+      <Grid
+        container
+        spacing={3}
+        sx={{ mb: 3, display: { xs: 'none', md: 'flex' }, justifyContent: 'center' }}
+        textAlign="center"
+      >
+        <Grid item md={3} display="flex" justifyContent="center">
+          <StatsCard {...cards[0]} />
         </Grid>
-        
-        <Grid item xs={12} md={3}>
-          <StatsCard
-            title="Para Hoy"
-            value={todayTodos.length}
-            subtitle="tareas programadas"
-            icon={<ScheduleIcon sx={{ fontSize: 40 }} />}
-            color="info"
-          />
+        <Grid item md={3} display="flex" justifyContent="center">
+          <StatsCard {...cards[1]} />
         </Grid>
-        
-        <Grid item xs={12} md={3}>
-          <StatsCard
-            title="Completadas"
-            value={stats.completed}
-            subtitle="tareas finalizadas"
-            icon={<CheckCircleIcon sx={{ fontSize: 40 }} />}
-            color="success"
-          />
+        <Grid item md={3} display="flex" justifyContent="center">
+          <StatsCard {...cards[2]} />
         </Grid>
-        
-        <Grid item xs={12} md={3}>
-          <StatsCard
-            title="Vencidas"
-            value={overdueTodos.length}
-            subtitle="requieren atención"
-            icon={<WarningIcon sx={{ fontSize: 40 }} />}
-            color="error"
-          />
+        <Grid item md={3} display="flex" justifyContent="center">
+          <StatsCard {...cards[3]} />
         </Grid>
       </Grid>
 
@@ -182,6 +258,6 @@ const TodoStats = () => {
       </Card>
     </Box>
   );
-};
+}
 
 export default TodoStats;
