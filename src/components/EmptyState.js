@@ -114,11 +114,7 @@ const EmptyState = ({ filter, searchTerm, onAddTask }) => {
         color="primary"
         size="large"
         startIcon={filter === 'all' && !searchTerm ? <AddIcon /> : null}
-        onClick={() => {
-          // This would typically trigger opening the add task form
-          // or clearing filters/search
-          console.log('Action button clicked');
-        }}
+        onClick={getEmptyStateContent().action}
       >
         {actionText}
       </Button>

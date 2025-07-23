@@ -127,13 +127,47 @@ const Header = () => {
             color="inherit"
             onClick={() => setDrawerOpen(true)}
             sx={{ mr: 2, display: { sm: 'none' } }}
+            aria-label="menu"
           >
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            TodoList Pro
-          </Typography>
+          {/* Logo + Nombre KambaLabs */}
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, minWidth: 0 }}>
+            <Box
+              component="img"
+              src="/kambalabs-logo.svg"
+              alt="KambaLabs Logo"
+              sx={{
+                width: { xs: 32, sm: 40 },
+                height: { xs: 32, sm: 40 },
+                mr: 1.2,
+                borderRadius: 2,
+                boxShadow: 2,
+                bgcolor: 'background.paper',
+                p: 0.2,
+                flexShrink: 0,
+              }}
+            />
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: 1,
+                whiteSpace: { xs: 'nowrap', sm: 'normal' },
+                overflow: { xs: 'hidden', sm: 'visible' },
+                textOverflow: { xs: 'ellipsis', sm: 'clip' },
+                fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' },
+                maxWidth: { xs: 120, sm: 'none' },
+                display: 'flex',
+                alignItems: 'center',
+                color: 'inherit',
+              }}
+            >
+              KambaLabs
+            </Typography>
+          </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {/* Search */}
@@ -280,7 +314,40 @@ const Header = () => {
         <Box sx={{ width: 250 }}>
           <List>
             <ListItem>
-              <Typography variant="h6">TodoList Pro</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, minWidth: 0 }}>
+                <Box
+                  component="img"
+                  src="/kambalabs-logo.svg"
+                  alt="KambaLabs Logo"
+                  sx={{
+                    width: { xs: 32, sm: 40 },
+                    height: { xs: 32, sm: 40 },
+                    mr: 1.2,
+                    borderRadius: 2,
+                    boxShadow: 2,
+                    bgcolor: 'background.paper',
+                    p: 0.2,
+                    flexShrink: 0,
+                  }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    letterSpacing: 1,
+                    whiteSpace: { xs: 'nowrap', sm: 'normal' },
+                    overflow: { xs: 'hidden', sm: 'visible' },
+                    textOverflow: { xs: 'ellipsis', sm: 'clip' },
+                    fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.5rem' },
+                    maxWidth: { xs: 120, sm: 'none' },
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: 'inherit',
+                  }}
+                >
+                  KambaLabs
+                </Typography>
+              </Box>
             </ListItem>
             <Divider />
             

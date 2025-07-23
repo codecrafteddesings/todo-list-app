@@ -1,0 +1,11 @@
+<!-- KambaLabs Logo SVG - Minimalista, tecnológico, adaptable a claro/oscuro -->
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#181C2A"/>
+  <g stroke="#00E0FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="30" y="30" width="60" height="60" rx="14"/>
+    <path d="M60 30V90"/>
+    <path d="M30 60H90"/>
+    <circle cx="60" cy="60" r="8" fill="#00E0FF"/>
+  </g>
+  <text x="60" y="110" text-anchor="middle" font-family="'Segoe UI', Arial, sans-serif" font-size="16" fill="#fff" font-weight="bold">KambaLabs</text>
+</svg>
