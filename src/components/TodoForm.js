@@ -14,6 +14,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,6 +32,7 @@ const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
     category: 'personal',
     priority: 'medium',
     dueDate: null,
+    dueTime: null,
     tags: []
   });
   const [errors, setErrors] = useState({});
@@ -43,6 +45,7 @@ const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
         category: initialData.category || 'personal',
         priority: initialData.priority || 'medium',
         dueDate: initialData.dueDate ? dayjs(initialData.dueDate) : null,
+        dueTime: initialData.dueTime ? dayjs(initialData.dueTime) : null,
         tags: initialData.tags || []
       });
     }
@@ -62,7 +65,8 @@ const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
     e.preventDefault();
     const todoData = {
       ...formData,
-      dueDate: formData.dueDate ? formData.dueDate.toISOString() : null
+      dueDate: formData.dueDate ? formData.dueDate.toISOString() : null,
+      dueTime: formData.dueTime ? formData.dueTime.format('HH:mm') : null
     };
     const validation = validateTodo(todoData);
     if (!validation.isValid) {
@@ -180,53 +184,85 @@ const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
                     }
                   },
                   popper: {
-                    placement: isMobile ? 'bottom' : 'bottom-start',
+                    placement: 'top',
                     sx: {
                       zIndex: 1400,
                       '& .MuiPaper-root': {
-                        marginTop: '8px',
+                        marginBottom: '8px',
                         boxShadow: 3,
                         borderRadius: 3,
-                        minWidth: isMobile ? '220px' : '320px',
-                        maxWidth: isMobile ? '220px' : '320px',
+                        minWidth: '250px',
+                        maxWidth: '250px',
                       },
                       '& .MuiDateCalendar-root': {
-                        maxHeight: isMobile ? '220px' : '350px',
-                        width: isMobile ? '220px' : '320px',
+                        maxHeight: '250px',
+                        width: '250px',
                         margin: 0,
                       },
                       '& .MuiPickersCalendarHeader-root': {
-                        paddingLeft: isMobile ? '8px' : '16px',
-                        paddingRight: isMobile ? '8px' : '16px',
-                        minHeight: isMobile ? '36px' : '48px',
-                        marginBottom: isMobile ? '4px' : '8px',
+                        paddingLeft: '8px',
+                        paddingRight: '8px',
+                        minHeight: '36px',
+                        marginBottom: '4px',
                       },
                       '& .MuiDayCalendar-header': {
-                        marginBottom: isMobile ? '4px' : '8px',
+                        marginBottom: '4px',
                       },
                       '& .MuiDayCalendar-weekDayLabel': {
-                        width: isMobile ? '24px' : '40px',
-                        height: isMobile ? '24px' : '40px',
-                        fontSize: isMobile ? '0.75rem' : '0.875rem',
+                        width: '24px',
+                        height: '24px',
+                        fontSize: '0.75rem',
                         fontWeight: 600,
                       },
                       '& .MuiPickersDay-root': {
-                        width: isMobile ? '24px' : '40px',
-                        height: isMobile ? '24px' : '40px',
-                        fontSize: isMobile ? '0.75rem' : '0.875rem',
-                        margin: isMobile ? '1px' : '2px',
+                        width: '24px',
+                        height: '24px',
+                        fontSize: '0.75rem',
+                        margin: '1px',
                       },
                       '& .MuiPickersCalendarHeader-label': {
-                        fontSize: isMobile ? '0.95rem' : '1.1rem',
+                        fontSize: '0.95rem',
                         fontWeight: 600,
                       },
                       '& .MuiPickersArrowSwitcher-root': {
                         '& .MuiIconButton-root': {
-                          padding: isMobile ? '4px' : '8px',
+                          padding: '4px',
                         }
                       },
                       '& .MuiDayCalendar-weekContainer': {
-                        margin: isMobile ? '2px 0' : '4px 0',
+                        margin: '2px 0',
+                      }
+                    }
+                  }
+                }}
+              />
+              <TimePicker
+                label="Hora de vencimiento (opcional)"
+                value={formData.dueTime}
+                onChange={(newValue) => handleInputChange('dueTime', newValue)}
+                ampm={false}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    size: 'small',
+                    sx: {
+                      mt: 2,
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'background.paper',
+                        borderRadius: 2
+                      }
+                    }
+                  },
+                  popper: {
+                    placement: 'top',
+                    sx: {
+                      zIndex: 1400,
+                      '& .MuiPaper-root': {
+                        marginBottom: '8px',
+                        boxShadow: 3,
+                        borderRadius: 3,
+                        minWidth: '250px',
+                        maxWidth: '250px',
                       }
                     }
                   }

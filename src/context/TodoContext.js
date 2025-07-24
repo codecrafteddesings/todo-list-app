@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { todoReducer, initialState } from './todoReducer';
 import { saveToStorage, loadFromStorage } from '../utils/storage';
+import { requestNotificationPermission, scheduleTaskNotification } from '../utils/notifications';
 
 const TodoContext = createContext();
 
@@ -24,6 +25,11 @@ export const TodoProvider = ({ children }) => {
     saveToStorage('todoApp', state);
   }, [state]);
 
+  // Solicitar permiso de notificación al cargar la app
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
   const addTodo = (todoData) => {
     const newTodo = {
       id: uuidv4(),
@@ -42,6 +48,7 @@ export const TodoProvider = ({ children }) => {
       pomodoroSessions: [] // Registro de sesiones pomodoro
     };
     dispatch({ type: 'ADD_TODO', payload: newTodo });
+    scheduleTaskNotification(newTodo);
   };
 
   const updateTodo = (id, updates) => {
@@ -55,6 +62,20 @@ export const TodoProvider = ({ children }) => {
         } 
       } 
     });
+      // Programar notificación si la tarea editada tiene fecha/hora
+      if (updates.dueDate && updates.dueTime) {
+        const dueDateTime = new Date(updates.dueDate);
+        const [hours, minutes] = updates.dueTime.split(":");
+        dueDateTime.setHours(Number(hours));
+        dueDateTime.setMinutes(Number(minutes));
+        import("../utils/notifications").then(({ scheduleNotification }) => {
+          scheduleNotification({
+            title: updates.text,
+            body: `Tienes una tarea pendiente: ${updates.text}`,
+            time: dueDateTime
+          });
+        });
+      }
   };
 
   const deleteTodo = (id) => {
