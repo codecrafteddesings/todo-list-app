@@ -1,44 +1,13 @@
+
 import React, { useState } from 'react';
-import {
-  Fab,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  useTheme,
-  useMediaQuery,
-  Slide,
-} from '@mui/material';
+import { Fab, Dialog, DialogTitle, DialogContent, useTheme, useMediaQuery, Slide } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import TodoForm from './TodoForm';
-import notificationService from '../services/NotificationService';
-
-// eslint-disable-next-line no-unused-vars
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const AddTodoFab = () => {
-  // Ejemplo: disparar notificación nativa
-  const handleNotify = () => {
-    notificationService.showNotification({
-      title: 'Notificación de prueba',
-      body: '¡Esta es una notificación nativa del navegador!',
-      icon: '/logo192.png',
-      tag: 'test-notification'
-    });
-  };
   const [open, setOpen] = useState(false);
-  const theme = useTheme();
-  // eslint-disable-next-line no-unused-vars
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -46,42 +15,34 @@ const AddTodoFab = () => {
         color="primary"
         aria-label="add"
         onClick={handleOpen}
+        size="small"
         sx={{
           position: 'fixed',
-          bottom: 16,
-          right: 16,
+          bottom: { xs: 14, sm: 16 },
+          right: { xs: 14, sm: 16 },
           zIndex: 1000,
+          boxShadow: 4,
+          width: 34,
+          height: 34,
+          minHeight: 34,
+          '& .MuiSvgIcon-root': {
+            fontSize: 18,
+          },
           '&:hover': {
-            transform: 'scale(1.1)',
+            transform: 'scale(1.08)',
           },
           transition: 'transform 0.2s ease-in-out',
         }}
       >
         <AddIcon />
       </Fab>
-
-      {/* Botón para disparar notificación de ejemplo */}
-      <Fab
-        color="secondary"
-        aria-label="notify"
-        onClick={handleNotify}
-        sx={{
-          position: 'fixed',
-          bottom: 80,
-          right: 16,
-          zIndex: 1000,
-        }}
-      >
-        🔔
-      </Fab>
-
       <Dialog
         open={open}
         onClose={handleClose}
         maxWidth={false}
         PaperProps={{
           sx: {
-            borderRadius: 4,
+            minHeight: 'auto',
             boxShadow: 8,
             maxWidth: 340,
             m: 'auto',
@@ -101,7 +62,6 @@ const AddTodoFab = () => {
           textAlign: 'center',
           borderBottom: '1px solid',
           borderColor: 'grey.100',
-          background: 'background.paper',
         }}>
           Agregar Nueva Tarea
         </DialogTitle>
@@ -112,13 +72,13 @@ const AddTodoFab = () => {
             pb: 2,
             minWidth: 'auto',
             minHeight: 'auto',
-            background: 'background.paper',
+            backgroundColor: 'background.paper',
             borderRadius: 3,
             '@media (max-width:600px)': {
               px: 1.5,
               pt: 0.5,
               pb: 1.5,
-            },
+            }
           }}
         >
           <TodoForm onSubmit={handleClose} />
