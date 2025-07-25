@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { useTodo } from '../context/TodoContext';
 import { filterTodos, sortTodos } from '../utils/helpers';
 
+// This custom hook provides filtered and sorted todos along with statistics
+
 export const useFilteredTodos = () => {
   const { todos, filter, searchTerm, sortBy } = useTodo();
 
@@ -21,6 +23,7 @@ export const useFilteredTodos = () => {
     ).length;
 
     return {
+      history: todos,
       total,
       completed,
       active,
