@@ -241,7 +241,7 @@ const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
                 label="Hora de vencimiento (opcional)"
                 value={formData.dueTime}
                 onChange={(newValue) => handleInputChange('dueTime', newValue)}
-                ampm={true}
+                ampm={false}
                 slotProps={{
                   textField: {
                     fullWidth: true,
