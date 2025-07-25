@@ -62,7 +62,17 @@ const TodoList = () => {
                 color: 'white'
               }}
             >
-              <Stack direction="row" spacing={3} justifyContent="space-around">
+              <Stack
+                direction="row"
+                spacing={1.5}
+                justifyContent="space-around"
+                sx={{
+                  flexWrap: { xs: 'nowrap', sm: 'wrap' },
+                  overflowX: { xs: 'auto', sm: 'visible' },
+                  WebkitOverflowScrolling: 'touch',
+                  minWidth: 0,
+                }}
+              >
                 <Box textAlign="center">
                   <Typography variant="h6" fontWeight="bold">
                     {todos.length}
