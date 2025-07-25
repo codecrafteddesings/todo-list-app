@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import TodoForm from './TodoForm';
+import notificationService from '../services/NotificationService';
 
 // eslint-disable-next-line no-unused-vars
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -17,6 +18,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const AddTodoFab = () => {
+  // Ejemplo: disparar notificación nativa
+  const handleNotify = () => {
+    notificationService.showNotification({
+      title: 'Notificación de prueba',
+      body: '¡Esta es una notificación nativa del navegador!',
+      icon: '/logo192.png',
+      tag: 'test-notification'
+    });
+  };
   const [open, setOpen] = useState(false);
   const theme = useTheme();
   // eslint-disable-next-line no-unused-vars
@@ -48,6 +58,21 @@ const AddTodoFab = () => {
         }}
       >
         <AddIcon />
+      </Fab>
+
+      {/* Botón para disparar notificación de ejemplo */}
+      <Fab
+        color="secondary"
+        aria-label="notify"
+        onClick={handleNotify}
+        sx={{
+          position: 'fixed',
+          bottom: 80,
+          right: 16,
+          zIndex: 1000,
+        }}
+      >
+        🔔
       </Fab>
 
       <Dialog
