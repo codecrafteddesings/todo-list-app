@@ -11,6 +11,7 @@ import {
 import { Add as AddIcon } from '@mui/icons-material';
 import TodoForm from './TodoForm';
 
+// eslint-disable-next-line no-unused-vars
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -18,6 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const AddTodoFab = () => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
+  // eslint-disable-next-line no-unused-vars
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleOpen = () => {

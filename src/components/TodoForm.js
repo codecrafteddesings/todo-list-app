@@ -25,6 +25,7 @@ import { validateTodo } from '../utils/helpers';
 const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
   const { addTodo, updateTodo, categories } = useTodo();
   const theme = useTheme();
+  // eslint-disable-next-line no-unused-vars
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [formData, setFormData] = useState({
     text: '',
