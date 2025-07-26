@@ -6,14 +6,15 @@ import {
   Box,
   Snackbar,
   Alert,
-  SpeedDial,
-  SpeedDialAction,
+  Fab,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import {
   GetApp as ExportIcon,
   Analytics as AnalyticsIcon,
   Timer as TimerIcon,
-  Settings as AdvancedSettingsIcon,
+  Settings as SettingsIcon,
   CloudUpload as ImportIcon,
 } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -39,6 +40,9 @@ dayjs.locale('es');
 
 // Componente principal de la aplicación
 const AppContent = () => {
+  const [gearMenuAnchor, setGearMenuAnchor] = React.useState(null);
+  const handleGearClick = (event) => setGearMenuAnchor(event.currentTarget);
+  const handleGearClose = () => setGearMenuAnchor(null);
   const { theme, error, todos } = useTodo();
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [currentView, setCurrentView] = React.useState('tasks'); // 'tasks', 'analytics'
@@ -133,32 +137,55 @@ const AppContent = () => {
           <AddTodoFab />
           
           {/* Speed Dial para funciones avanzadas */}
-          <SpeedDial
-            ariaLabel="Funciones avanzadas"
-            sx={{ position: 'fixed', bottom: 90, right: 16 }}
-            icon={<AdvancedSettingsIcon />}
+          <Fab
+            color="primary"
+            aria-label="configuración"
+            onClick={handleGearClick}
+            size="small"
+            sx={{
+              position: 'fixed',
+              bottom: { xs: 60, sm: 70 },
+              right: { xs: 14, sm: 16 },
+              zIndex: 1000,
+              boxShadow: 4,
+              width: 34,
+              height: 34,
+              minHeight: 34,
+              borderRadius: '50%',
+              backgroundColor: 'primary.main',
+              color: 'white',
+              '& .MuiSvgIcon-root': {
+                fontSize: 18,
+              },
+              '&:hover': {
+                backgroundColor: 'primary.dark',
+                transform: 'scale(1.08)',
+              },
+              transition: 'transform 0.2s ease-in-out',
+            }}
           >
-            <SpeedDialAction
-              icon={<AnalyticsIcon />}
-              tooltipTitle="Análisis"
-              onClick={() => setCurrentView(currentView === 'analytics' ? 'tasks' : 'analytics')}
-            />
-            <SpeedDialAction
-              icon={<ExportIcon />}
-              tooltipTitle="Exportar"
-              onClick={() => setExportDialogOpen(true)}
-            />
-            <SpeedDialAction
-              icon={<ImportIcon />}
-              tooltipTitle="Importar"
-              onClick={() => setImportDialogOpen(true)}
-            />
-            <SpeedDialAction
-              icon={<TimerIcon />}
-              tooltipTitle="Pomodoro"
-              onClick={() => setPomodoroOpen(true)}
-            />
-          </SpeedDial>
+            <SettingsIcon sx={{ fontSize: 18 }} />
+          </Fab>
+          <Menu
+            anchorEl={gearMenuAnchor}
+            open={Boolean(gearMenuAnchor)}
+            onClose={handleGearClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          >
+            <MenuItem onClick={() => { setCurrentView(currentView === 'analytics' ? 'tasks' : 'analytics'); handleGearClose(); }}>
+              <AnalyticsIcon sx={{ mr: 1 }} /> Análisis
+            </MenuItem>
+            <MenuItem onClick={() => { setExportDialogOpen(true); handleGearClose(); }}>
+              <ExportIcon sx={{ mr: 1 }} /> Exportar
+            </MenuItem>
+            <MenuItem onClick={() => { setImportDialogOpen(true); handleGearClose(); }}>
+              <ImportIcon sx={{ mr: 1 }} /> Importar
+            </MenuItem>
+            <MenuItem onClick={() => { setPomodoroOpen(true); handleGearClose(); }}>
+              <TimerIcon sx={{ mr: 1 }} /> Pomodoro
+            </MenuItem>
+          </Menu>
 
           {/* Diálogos */}
           <ExportDialog

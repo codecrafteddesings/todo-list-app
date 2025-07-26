@@ -200,11 +200,13 @@ const AdvancedSettingsDialog = ({ open, onClose }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        <Box display="flex" alignItems="center" gap={1}>
-          <SettingsIcon />
-          Configuración Avanzada
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+      <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <SettingsIcon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+          <Typography variant="h6" fontWeight={700}>
+            Configuración avanzada
+          </Typography>
         </Box>
       </DialogTitle>
       
