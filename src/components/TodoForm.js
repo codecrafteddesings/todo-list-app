@@ -64,9 +64,19 @@ const TodoForm = ({ initialData = null, onSubmit, isEditing = false }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let dueDateFinal = null;
+    if (formData.dueDate) {
+      if (formData.dueTime) {
+        // Combina fecha y hora seleccionadas
+        dueDateFinal = formData.dueDate.hour(formData.dueTime.hour()).minute(formData.dueTime.minute());
+      } else {
+        // Si no hay hora, asigna 23:59
+        dueDateFinal = formData.dueDate.hour(23).minute(59);
+      }
+    }
     const todoData = {
       ...formData,
-      dueDate: formData.dueDate ? formData.dueDate.toISOString() : null,
+      dueDate: dueDateFinal ? dueDateFinal.toISOString() : null,
       dueTime: formData.dueTime ? formData.dueTime.format('HH:mm') : null
     };
     const validation = validateTodo(todoData);

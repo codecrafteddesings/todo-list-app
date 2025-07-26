@@ -52,6 +52,18 @@ const AppContent = () => {
   const [advancedSettingsOpen, setAdvancedSettingsOpen] = React.useState(false);
   const [selectedTodoForPomodoro] = React.useState(null);
 
+  const [notificationReady, setNotificationReady] = React.useState(false);
+
+  // Handler para activar sonido de notificación
+  const handleEnableNotificationSound = () => {
+    // Reproducir un sonido silencioso para desbloquear el audio
+    const audio = new window.Audio('/notification.mp3');
+    audio.volume = 0;
+    audio.play().finally(() => {
+      setNotificationReady(true);
+    });
+  };
+
   // Inicializar servicios
   useEffect(() => {
     // Inicializar notificaciones
@@ -88,6 +100,15 @@ const AppContent = () => {
         navigator.serviceWorker.register('/sw.js')
           .then((registration) => {
             console.log('SW registered: ', registration);
+  // Handler para activar sonido de notificación
+  const handleEnableNotificationSound = () => {
+    // Reproducir un sonido silencioso para desbloquear el audio
+    const audio = new window.Audio('/notification.mp3');
+    audio.volume = 0;
+    audio.play().finally(() => {
+      setNotificationReady(true);
+    });
+  };
           })
           .catch((registrationError) => {
             console.log('SW registration failed: ', registrationError);
@@ -102,6 +123,20 @@ const AppContent = () => {
 
   return (
     <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+          {/* Botón para activar sonido de notificación */}
+          {!notificationReady && (
+            <Box sx={{ p: 2, textAlign: 'center', background: '#fffbe6', borderBottom: '1px solid #ffe58f' }}>
+              <Alert severity="info" sx={{ mb: 1 }}>
+                Para escuchar el sonido de notificación, haz clic en el botón de abajo una vez.
+              </Alert>
+              <button
+                style={{ padding: '8px 16px', fontSize: '1rem', borderRadius: '6px', background: '#ffe58f', border: 'none', cursor: 'pointer' }}
+                onClick={handleEnableNotificationSound}
+              >
+                Activar sonido de notificación
+              </button>
+            </Box>
+          )}
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
         <CssBaseline />
         
